@@ -14,6 +14,69 @@ class App extends Component {
     this.run();
   }
 
+  getmodel() {
+    this.model = tf.sequential();
+
+    const IMAGE_WIDTH = 28,
+      IMAGE_HEIGHT = 28,
+      IMAGE_CHANNEL = 1;
+
+    // In the first layer of our convolutional neural network we have
+    // to specify the input shape. Then we specify some parameters for
+    // the convolution operation that takes place in this layer.
+    this.model.add(
+      tf.layers.conv2d({
+        inputShape: [IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_CHANNEL],
+        kernelSize: 5,
+        filters: 8,
+        strides: 1,
+        activation: "relu",
+        kernelInitializer: "varianceScaling"
+      })
+    );
+
+    //pooling layer
+    this.model.add(
+      tf.layers.maxPooling2d({ poolSize: [2, 2], strides: [2, 2] })
+    );
+
+    //adding one more conv+maxpool layers
+    this.model.add(
+      tf.layers.conv2d({
+        kernelSize: 5,
+        filters: 16,
+        strides: 1,
+        activation: "relu",
+        kernelInitializer: "varianceScaling"
+      })
+    );
+    this.model.add(
+      tf.layers.maxPooling2d({ poolSize: [2, 2], strides: [2, 2] })
+    );
+
+    //flatten the output from 2d to 1d filter
+    this.model.add(tf.layers.flatten());
+
+    //dense layer for output prediction
+    const NUMBER_OF_OUTPUT_CLASS = 10;
+    this.model.add(
+      tf.layers.dense({
+        units: NUMBER_OF_OUTPUT_CLASS,
+        activation: "softmax",
+        kernelInitializer: "varianceScaling"
+      })
+    );
+
+    // Choose an optimizer, loss function and accuracy metric,
+    // then compile and return the model
+    const optimiser = tf.train.adam();
+    this.model.compile({
+      optimizer: optimiser,
+      loss: "categoricalCrossentropy",
+      metrics: ["accuracy"]
+    });
+  }
+
   /**
    * @summary loads data from mnist
    */
