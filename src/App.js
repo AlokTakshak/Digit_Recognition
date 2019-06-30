@@ -14,6 +14,9 @@ class App extends Component {
     this.run();
   }
 
+  /**
+   * @summary sets up the model for image classification
+   */
   getmodel() {
     this.model = tf.sequential();
 
@@ -82,22 +85,26 @@ class App extends Component {
    */
   async run() {
     let data = new MnistData();
-    await data.load();
-    this.showExample(data);
+    this.data = data;
+    await this.data.load();
+    this.showExample();
+    this.getmodel();
+    tfvis.show.modelSummary({ name: "Model Architecture" }, this.model);
+    await this.train();
   }
 
   /**
    * @summary extract individual image from data reshape it to 28x28
    * and draw it on canvas
    */
-  async showExample(data) {
+  async showExample() {
     // create a container in the visor
     let surface = tfvis
       .visor()
       .surface({ name: "Image Data Examples", tab: "Image Data" });
 
     //Get Examples
-    let examples = data.nextTestBatch(20);
+    let examples = this.data.nextTestBatch(20);
     let numberOfExamples = examples.xs.shape[0];
 
     for (let i = 0; i < numberOfExamples; i++) {
@@ -116,6 +123,43 @@ class App extends Component {
       surface.drawArea.appendChild(canvas);
       imageTensor.dispose();
     }
+  }
+
+  async train() {
+    const metrics = ["loss", "val_loss", "acc", "val_acc"];
+    const container = { name: "Model Training", styles: { height: "1000px" } };
+
+    let fitCallbacks = tfvis.show.fitCallbacks(container, metrics);
+
+    const BATCH_SIZE = 512,
+      TRAIN_DATA_SIZE = 5500,
+      TEST_DATA_SIZE = 1000;
+
+    // getting the training dataset
+    const [trainXs, trainYs] = tf.tidy(() => {
+      let train_data = this.data.nextTrainBatch(TRAIN_DATA_SIZE);
+      return [
+        train_data.xs.reshape([TRAIN_DATA_SIZE, 28, 28, 1]),
+        train_data.labels
+      ];
+    });
+
+    // getting the testting dataset for validation
+    const [testXs, testYs] = tf.tidy(() => {
+      let test_data = this.data.nextTestBatch(TEST_DATA_SIZE);
+      return [
+        test_data.xs.reshape([TEST_DATA_SIZE, 28, 28, 1]),
+        test_data.labels
+      ];
+    });
+
+    return await this.model.fit(trainXs, trainYs, {
+      batchSize: BATCH_SIZE,
+      validationData: [testXs, testYs],
+      epochs: 10,
+      shuffle: true,
+      callbacks: fitCallbacks
+    });
   }
 
   render() {
