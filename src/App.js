@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Canvas from "./Canvas";
 import * as tf from "@tensorflow/tfjs";
 import * as tfvis from "@tensorflow/tfjs-vis";
 import { MnistData } from "./data";
@@ -164,8 +165,10 @@ class App extends Component {
 
   render() {
     return (
-      <div>
-        <div className="header">Welcome to digit recoginizer</div>
+      <div className="App">
+        <div className="row-header">Welcome to digit recoginizer</div>
+
+        <Canvas />
       </div>
     );
   }
