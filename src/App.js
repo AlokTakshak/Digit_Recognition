@@ -12,7 +12,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    // this.run();
+    this.run();
   }
 
   /**
@@ -80,6 +80,10 @@ class App extends Component {
       metrics: ["accuracy"]
     });
   }
+
+  predict = inputImage => {
+    return this.model.predict([inputImage]);
+  };
 
   /**
    * @summary loads data from mnist
@@ -167,7 +171,7 @@ class App extends Component {
     return (
       <div className="App">
         <div className="row-header">Welcome to digit recoginizer</div>
-        <Canvas />
+        <Canvas predict={this.predict} />
       </div>
     );
   }

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { LINE_WIDTH, STROKE_STYLE } from "./constants";
+import * as tf from "@tensorflow/tfjs";
 import "./Canvas.css";
 
 class Canvas extends Component {
@@ -61,6 +62,21 @@ class Canvas extends Component {
     this.draw = false;
   };
 
+  Predict = () => {
+    let { predict } = this.props;
+    let inputImage = tf.tidy(() => {
+      let inputImage = tf.browser.fromPixels(this.canvas, 1);
+      let reSizedImage = tf.image.resizeBilinear(inputImage, [28, 28]);
+      let inputImageData = reSizedImage.flatten().dataSync();
+      return tf.tensor4d([...inputImageData], [1, 28, 28, 1]);
+    });
+
+    // inputImage.reshape(28, 28, 1);
+    console.log(inputImage.shape);
+    let result = predict(inputImage);
+    result.print();
+  };
+
   render() {
     return (
       <div className="canvas_component">
@@ -75,6 +91,7 @@ class Canvas extends Component {
           onMouseUp={this.onMouseUp}
         />
         <div className="row-button">
+          <button onClick={this.Predict}>Predict</button>
           <button onClick={this.clearCanvas}>Clear</button>
         </div>
       </div>
