@@ -14,6 +14,11 @@ class Canvas extends Component {
     this.context = this.canvas.getContext("2d");
   }
 
+  clearCanvas = () => {
+    let { height, width } = this.canvas;
+    this.context.clearRect(0, 0, width, height);
+  };
+
   drawCircle(startX, startY, radius = 10) {
     this.context.save();
     this.context.lineWidth = 1;
@@ -69,6 +74,9 @@ class Canvas extends Component {
           onMouseMove={this.onMouseMove}
           onMouseUp={this.onMouseUp}
         />
+        <div className="row-button">
+          <button onClick={this.clearCanvas}>Clear</button>
+        </div>
       </div>
     );
   }
