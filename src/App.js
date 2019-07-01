@@ -12,7 +12,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.run();
+    // this.run();
   }
 
   /**
@@ -167,7 +167,6 @@ class App extends Component {
     return (
       <div className="App">
         <div className="row-header">Welcome to digit recoginizer</div>
-
         <Canvas />
       </div>
     );
