@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { LINE_WIDTH, STROKE_STYLE } from "./constants";
 import * as tf from "@tensorflow/tfjs";
+import BarGraph from "./Graph";
 import "./Canvas.css";
 
 class Canvas extends Component {
@@ -8,6 +9,7 @@ class Canvas extends Component {
     super(props);
     this.state = { draw: false };
     this.draw = false;
+    this.result = null;
   }
 
   componentDidMount() {
@@ -72,9 +74,11 @@ class Canvas extends Component {
     });
 
     // inputImage.reshape(28, 28, 1);
-    console.log(inputImage.shape);
+
     let result = predict(inputImage);
-    result.print();
+
+    let data = result.dataSync();
+    this.graph.drawBarGraph(data);
   };
 
   render() {
@@ -93,6 +97,14 @@ class Canvas extends Component {
         <div className="row-button">
           <button onClick={this.Predict}>Predict</button>
           <button onClick={this.clearCanvas}>Clear</button>
+        </div>
+        <div className="row-graph">
+          <BarGraph
+            data={this.result}
+            ref={node => {
+              this.graph = node;
+            }}
+          />
         </div>
       </div>
     );

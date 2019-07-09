@@ -15,6 +15,10 @@
   align-items: center;
   font-weight: bold;
 }
+
+.row-graph {
+  grid-row: 9;
+}
 .row-button button {
   font-weight: bold;
 }

@@ -137,8 +137,8 @@ class App extends Component {
     let fitCallbacks = tfvis.show.fitCallbacks(container, metrics);
 
     const BATCH_SIZE = 512,
-      TRAIN_DATA_SIZE = 5500,
-      TEST_DATA_SIZE = 1000;
+      TRAIN_DATA_SIZE = 10000,
+      TEST_DATA_SIZE = 1500;
 
     // getting the training dataset
     const [trainXs, trainYs] = tf.tidy(() => {
@@ -161,7 +161,7 @@ class App extends Component {
     return await this.model.fit(trainXs, trainYs, {
       batchSize: BATCH_SIZE,
       validationData: [testXs, testYs],
-      epochs: 10,
+      epochs: 20,
       shuffle: true,
       callbacks: fitCallbacks
     });
