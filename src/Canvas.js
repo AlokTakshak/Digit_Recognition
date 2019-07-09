@@ -74,10 +74,9 @@ class Canvas extends Component {
     });
 
     // inputImage.reshape(28, 28, 1);
-    console.log(inputImage.shape);
+
     let result = predict(inputImage);
-    result.print();
-    console.log("result", result.dataSync());
+
     let data = result.dataSync();
     this.graph.drawBarGraph(data);
   };

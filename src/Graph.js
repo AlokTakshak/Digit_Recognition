@@ -14,9 +14,6 @@ class BarGraph extends Component {
     this.initalize();
     this.drawBarGraph([]);
   }
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log(this.props.data, nextProps.data);
-  }
 
   drawBarGraph = data => {
     let barGraph = d3.select("#bar");
