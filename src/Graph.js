@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import * as d3 from "d3";
+import "./Graph.css";
 
-const WIDTH = 800;
-const HEIGHT = 400;
+const WIDTH = 600;
+const HEIGHT = 300;
+const GAP = 20;
 
 class BarGraph extends Component {
   constructor(props) {
@@ -26,7 +28,7 @@ class BarGraph extends Component {
     let yAxis = d3
       .scaleLinear()
       .domain([0, 100])
-      .range([HEIGHT - 50, 0]);
+      .range([HEIGHT - GAP, 0]);
 
     barGraph
       .selectAll("rect")
@@ -43,12 +45,13 @@ class BarGraph extends Component {
         return xAxis.bandwidth();
       })
       .attr("height", (height, index) => {
-        return HEIGHT - 50 - yAxis(height * 100);
+        return HEIGHT - GAP - yAxis(height * 100);
       })
-      .attr("fill", "green");
+      .attr("fill", "#d0ff85")
+      .attr("stroke", "black");
     barGraph
       .append("g")
-      .attr("transform", `translate(0,${HEIGHT - 50})`)
+      .attr("transform", `translate(0,${HEIGHT - GAP})`)
       .call(d3.axisBottom(xAxis));
   };
 
@@ -60,8 +63,7 @@ class BarGraph extends Component {
       .append("svg")
       .attr("id", "bar")
       .attr("width", WIDTH)
-      .attr("height", HEIGHT)
-      .style("border", "solid 1px black");
+      .attr("height", HEIGHT);
   }
 
   render() {

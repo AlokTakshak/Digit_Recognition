@@ -83,21 +83,27 @@ class Canvas extends Component {
 
   render() {
     return (
-      <div className="canvas_component">
-        <div className="row-canvas-header">Canvas Component</div>
-        <canvas
-          id="canvas"
-          className="row-canvas"
-          width="280"
-          height="280"
-          onMouseDown={this.onMouseDown}
-          onMouseMove={this.onMouseMove}
-          onMouseUp={this.onMouseUp}
-        />
-        <div className="row-button">
-          <button onClick={this.Predict}>Predict</button>
-          <button onClick={this.clearCanvas}>Clear</button>
+      <div className="row-canvas_component">
+        <h3>Draw Here for testing model</h3>
+        <div className="drawer">
+          <canvas
+            id="canvas"
+            width="280"
+            height="280"
+            onMouseDown={this.onMouseDown}
+            onMouseMove={this.onMouseMove}
+            onMouseUp={this.onMouseUp}
+          />
+          <div className="row-button">
+            <button className="button" onClick={this.Predict}>
+              Predict
+            </button>
+            <button className="button" onClick={this.clearCanvas}>
+              Clear
+            </button>
+          </div>
         </div>
+
         <div className="row-graph">
           <BarGraph
             data={this.result}
