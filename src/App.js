@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { EPOCHS, BATCHSIZE, TRAINDATASIZE, TESTDATASIZE } from "./constants";
+import InputSelector from "./InputsSelector";
 import Canvas from "./Canvas";
 import * as tf from "@tensorflow/tfjs";
 import * as tfvis from "@tensorflow/tfjs-vis";
@@ -8,11 +10,8 @@ import "./App.css";
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
-  }
-
-  componentDidMount() {
-    this.run();
+    this.state = { startTrain: false };
+    this.run = this.run.bind(this);
   }
 
   /**
@@ -86,16 +85,20 @@ class App extends Component {
   };
 
   /**
+   * @param {Number} epochs epochs for training
+   * @param {Number} trainSize size of dataset used for training
+   * @param {Number} testSize size of dataset for testing
    * @summary loads data from mnist
    */
-  async run() {
+  async run(epochs, trainSize, testSize) {
     let data = new MnistData();
     this.data = data;
     await this.data.load();
     this.showExample();
     this.getmodel();
     tfvis.show.modelSummary({ name: "Model Architecture" }, this.model);
-    await this.train();
+    await this.train(Number(epochs), Number(trainSize), Number(testSize));
+    await this.setState({ startTrain: true });
   }
 
   /**
@@ -130,16 +133,20 @@ class App extends Component {
     }
   }
 
-  async train() {
+  /**
+   * @param {Number} epochs epochs for training
+   * @param {Number} trainSize size of dataset used for training
+   * @param {Number} testSize size of dataset for testing
+   */
+  async train(epochs, trainSize, testSize) {
     const metrics = ["loss", "val_loss", "acc", "val_acc"];
     const container = { name: "Model Training", styles: { height: "1000px" } };
 
     let fitCallbacks = tfvis.show.fitCallbacks(container, metrics);
 
-    const BATCH_SIZE = 512,
-      TRAIN_DATA_SIZE = 10000,
-      TEST_DATA_SIZE = 1500;
-
+    const BATCH_SIZE = BATCHSIZE,
+      TRAIN_DATA_SIZE = trainSize || TRAINDATASIZE,
+      TEST_DATA_SIZE = testSize || TESTDATASIZE;
     // getting the training dataset
     const [trainXs, trainYs] = tf.tidy(() => {
       let train_data = this.data.nextTrainBatch(TRAIN_DATA_SIZE);
@@ -161,17 +168,21 @@ class App extends Component {
     return await this.model.fit(trainXs, trainYs, {
       batchSize: BATCH_SIZE,
       validationData: [testXs, testYs],
-      epochs: 20,
+      epochs: epochs || EPOCHS,
       shuffle: true,
       callbacks: fitCallbacks
     });
   }
 
   render() {
+    let { startTrain } = this.state;
     return (
       <div className="App">
-        <div className="row-header">Welcome to digit recoginizer</div>
-        <Canvas predict={this.predict} />
+        <h2 className="row-header">Welcome to digit recoginizer</h2>
+        <div className="row-inputs">
+          <InputSelector train={this.run} />
+        </div>
+        {startTrain && <Canvas predict={this.predict} />}
       </div>
     );
   }

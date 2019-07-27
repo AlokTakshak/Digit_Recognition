@@ -1,24 +1,18 @@
-.canvas_component {
-  grid-row: 2/10;
-  display: grid;
-  grid-template-rows: repeat(12, 8.33%);
-}
-
-.row-canvas {
+#canvas {
   background-color: black;
 }
-
-.row-button {
-  grid-row: 8;
+.drawer {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  font-weight: bold;
+  flex-wrap: wrap;
+  align-items: flex-end;
 }
 
-.row-graph {
-  grid-row: 9;
-}
 .row-button button {
   font-weight: bold;
+}
+
+@media screen and (max-width: 506px) {
+  #canvas {
+    width: 100%;
+  }
 }

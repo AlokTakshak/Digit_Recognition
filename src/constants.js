@@ -1,2 +1,12 @@
+export const EPOCHS = 20;
+export const MINEPOCHS = 1;
+export const MAXEPOCHS = 50;
+export const MINTRAIN = 1;
+export const MAXTRAIN = 50000;
+export const MINTEST = 1;
+export const MAXTEST = 1000;
+export const BATCHSIZE = 512;
+export const TRAINDATASIZE = 10000;
+export const TESTDATASIZE = 1500;
 export const LINE_WIDTH = 20;
 export const STROKE_STYLE = "white";
