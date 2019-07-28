@@ -14,12 +14,48 @@ class BarGraph extends Component {
 
   componentDidMount() {
     this.initalize();
-    this.drawBarGraph([]);
+    this.initialBarGraph([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+    // window.addEventListener("resize", () => {
+    //   d3.select("#bar").remove();
+    // });
   }
 
   drawBarGraph = data => {
     let barGraph = d3.select("#bar");
-    barGraph.selectAll("*").remove();
+    let xAxis = d3
+      .scaleBand()
+      .domain([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+      .range([0, WIDTH])
+      .padding([0.1]);
+    let yAxis = d3
+      .scaleLinear()
+      .domain([0, 100])
+      .range([HEIGHT - GAP, 0]);
+    barGraph
+      .selectAll("rect")
+      .data(data)
+      .transition()
+      .duration(1500)
+      .ease(d3.easeElasticOut)
+      .attr("x", (height, index) => {
+        return xAxis(index);
+      })
+      .attr("y", (height, index) => {
+        return yAxis(height * 100);
+      })
+      .attr("width", (height, index) => {
+        return xAxis.bandwidth();
+      })
+      .attr("height", (height, index) => {
+        return HEIGHT - GAP - yAxis(height * 100);
+      })
+      .attr("fill", "#d0ff85")
+      .attr("stroke", "black");
+  };
+
+  initialBarGraph = data => {
+    let barGraph = d3.select("#bar");
+    // barGraph.selectAll("*").remove();
     let xAxis = d3
       .scaleBand()
       .domain([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
