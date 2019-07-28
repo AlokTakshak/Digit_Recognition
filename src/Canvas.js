@@ -13,8 +13,11 @@ class Canvas extends Component {
   }
 
   componentDidMount() {
-    this.canvas = document.getElementById("canvas");
-    this.context = this.canvas.getContext("2d");
+    this.initalize();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    this.initalize();
   }
 
   clearCanvas = () => {
@@ -36,6 +39,11 @@ class Canvas extends Component {
   getCursorPosition = event => {
     let { left, top } = this.canvas.getBoundingClientRect();
     return { x: event.clientX - left, y: event.clientY - top };
+  };
+
+  initalize = () => {
+    this.canvas = document.getElementById("canvas");
+    this.context = this.canvas.getContext("2d");
   };
 
   onMouseDown = event => {
