@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Digit Predictor",
+  "name": "Digit Predictor",
   "icons": [
     {
       "src": "favicon.ico",
