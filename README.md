@@ -1,3 +1,5 @@
+## Live Demo [here](https://aloktakshakdigitrecogniser.netlify.com/)
+
 ## Available Scripts
 
 In the project directory, you can run:
